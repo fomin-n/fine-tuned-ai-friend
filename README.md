@@ -1,19 +1,21 @@
 # fine-tuned-ai-friend
 
-A Google Colab-ready notebook for fine-tuning `Qwen/Qwen3-0.6B` with LoRA supervised fine-tuning on a Telegram chat export. The task is simple: given recent chat context, train the model to generate the selected friend's next message.
+A Google Colab-ready notebook for fine-tuning a small language model with LoRA supervised fine-tuning on a Telegram chat export. The task is simple: given recent chat context, train the model to generate the selected friend's next message.
+
+The default model is now `HuggingFaceTB/SmolLM2-360M-Instruct` because it is much less likely to run out of memory on a Colab T4 than Qwen's larger-vocabulary models. If you have a larger GPU, the notebook configuration cell shows how to switch back to `Qwen/Qwen3-0.6B`.
 
 This project is intended for personal and private experimentation. Telegram exports, generated training examples, trained adapters, and model outputs may contain private information. Do not publish them unless every participant has consented and the content has been reviewed.
 
 ## What It Produces
 
-- A trained LoRA adapter in `qwen3-0.6b-ai-friend-lora/`
+- A trained LoRA adapter in the configured `OUTPUT_DIR`, defaulting to `smollm2-360m-ai-friend-lora/`
 - Safe aggregate dataset statistics
 - Manual generation examples
 - A small Gradio chat demo running inside the Colab session
 
 ## How It Works
 
-The notebook parses a Telegram `result.json`, asks you to choose which speaker should be modeled, builds supervised examples from recent chat history, fine-tunes `Qwen/Qwen3-0.6B` with PEFT LoRA, and reloads the adapter for inference.
+The notebook parses a Telegram `result.json`, asks you to choose which speaker should be modeled, builds supervised examples from recent chat history, fine-tunes the configured model with PEFT LoRA, and reloads the adapter for inference.
 
 The notebook never includes real Telegram messages in the repository. It also avoids printing raw training examples by default.
 
@@ -49,6 +51,6 @@ Do not commit `result.json`. The `.gitignore` is configured to keep Telegram exp
 ## Notes
 
 - Training is intended for Google Colab GPU. Local execution may work for parsing and dataset preparation, but full fine-tuning is not expected to be practical on most CPUs.
-- The notebook uses memory-conscious Colab defaults: 4-bit loading, LoRA, sequence length 512, train and validation batch size 1, and prediction-loss-only evaluation. If Colab still runs out of memory, lower `MAX_SEQ_LENGTH` to 384 or 256, lower `MAX_CONTEXT_MESSAGES`, or set `TRAIN_TEST_SPLIT = 0` to skip validation.
+- The notebook uses memory-conscious Colab defaults: `SmolLM2-360M-Instruct`, 4-bit loading, LoRA, sequence length 256, answer-only loss, train batch size 1, and no validation by default. If Colab still runs out of memory, restart the runtime, lower `MAX_SEQ_LENGTH`, lower `MAX_CONTEXT_MESSAGES`, lower `MAX_ANSWER_TOKENS`, or switch to `HuggingFaceTB/SmolLM2-135M-Instruct`.
 - The quality of the generated replies depends on the amount and consistency of the Telegram export.
 - Generated replies are synthetic and may be inaccurate, inappropriate, or unlike the selected person. Review outputs carefully.

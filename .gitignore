@@ -10,6 +10,8 @@ logs/
 wandb/
 runs/
 qwen3-0.6b-ai-friend-lora/
+smollm2-360m-ai-friend-lora/
+*-ai-friend-lora/
 
 *.jsonl
 *.safetensors
