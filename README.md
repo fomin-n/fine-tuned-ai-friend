@@ -49,5 +49,6 @@ Do not commit `result.json`. The `.gitignore` is configured to keep Telegram exp
 ## Notes
 
 - Training is intended for Google Colab GPU. Local execution may work for parsing and dataset preparation, but full fine-tuning is not expected to be practical on most CPUs.
+- The notebook uses memory-conscious Colab defaults: 4-bit loading, LoRA, sequence length 512, train and validation batch size 1, and prediction-loss-only evaluation. If Colab still runs out of memory, lower `MAX_SEQ_LENGTH` to 384 or 256, lower `MAX_CONTEXT_MESSAGES`, or set `TRAIN_TEST_SPLIT = 0` to skip validation.
 - The quality of the generated replies depends on the amount and consistency of the Telegram export.
 - Generated replies are synthetic and may be inaccurate, inappropriate, or unlike the selected person. Review outputs carefully.
