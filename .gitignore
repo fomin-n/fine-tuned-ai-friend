@@ -12,6 +12,8 @@ runs/
 qwen3-0.6b-ai-friend-lora/
 smollm2-360m-ai-friend-lora/
 *-ai-friend-lora/
+friend_lora_output/
+generation_examples.json
 
 *.jsonl
 *.safetensors
